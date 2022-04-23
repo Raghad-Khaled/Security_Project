@@ -36,21 +36,35 @@ def Recive(s):
             print(full_msg[HEADERSIZE:])
             return full_msg[HEADERSIZE:]
 
+#recive public key from user A
 s=readyRecive()
-e=int(Recive(s)) #recive the public key for reciver
-n=int(Recive(s))
+e_A=int(Recive(s)) #recive the public key for reciver
+n_A=int(Recive(s))
 
-Message=ReadMessage()
-print(Message)
-Cipher=Encrypt(str(Message),n,e) # encript with the publick key of reciver
+#send public key to user A
+P,Q=ReadfromFile('PQ2.txt')
+e,n=GeneratePublicKey(P,Q)
+d,n=GeneratePrivateKey(P,Q,e)
 clientsocket, address =readySend()
-if(Cipher != false):
-    Send(Cipher,clientsocket, address ) #send the cipher message to reciver
-else:
-    Cipher=Encrypt(str(0),n,e)
-    Send(Cipher,clientsocket, address ) #send the cipher message to reciver
+Send(str(e),clientsocket, address )
+Send(str(n),clientsocket, address )
 
-#print(Cipher)
+
+while True:
+    Message = input ("Message to User A :")
+    Cipher=Encrypt(str(Message),n_A,e_A) # encript with the publick key of reciver
+    if(Cipher != false):
+        Send(Cipher,clientsocket, address ) #send the cipher message to reciver
+    else:
+        Cipher=Encrypt(str(0),n_A,e_A)
+        Send(Cipher,clientsocket, address ) #send the cipher message to reciver
+
+    Cipher=Recive(s) #recive the Cipher text
+    Message=Decrypt(Cipher,n,d)
+    if(Message=='0'):
+        print("The Message Sended is too long, please incerase P & Q and resend the public key to can recive it")
+    else:
+        print(f"Recived Message from A :{Message} ")    
 
 
 

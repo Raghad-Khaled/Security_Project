@@ -24,7 +24,7 @@ def Recive(s):
     full_msg=''
     new_msg = True
     while True:
-        msg = s.recv(16)
+        msg = s.recv(8)
         if new_msg:
             #print("new msg len:",msg[:HEADERSIZE])
             msglen = int(msg[:HEADERSIZE])
@@ -47,7 +47,10 @@ s=readyRecive()
 Cipher=Recive(s) #recive the Cipher text
 #print(Cipher)
 Message=Decrypt(Cipher,n,d)
-print(f"Recived Message :{Message} ")
+if(Message=='0'):
+    print("The Message Sended is too long, please incerase P & Q and resend the public key to can recive it")
+else:
+    print(f"Recived Message :{Message} ")
 
 
 

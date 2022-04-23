@@ -55,8 +55,8 @@ def isprime(n):
     return n > 1 and all(n % i for i in range(2, int(n ** 0.5) + 1)) 
 
 
-def ReadfromFile():
-    with open('PQ.txt') as f:
+def ReadfromFile(filename):
+    with open(filename) as f:
         try:
             P =int(f.readline())
             Q = int(f.readline())
