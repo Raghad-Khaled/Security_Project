@@ -1,8 +1,6 @@
 from RSA import *
 import socket
 
-HEADERSIZE = 10
-
 def readySend():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((socket.gethostname(), 1241))
@@ -10,9 +8,7 @@ def readySend():
     return s.accept()
 
 def Send(msg,clientsocket, address):
-    print(f"Connection from {address} has been established.")
-    #msg = f"{len(msg):<{HEADERSIZE}}"+msg
-    #print(msg)
+    #print(f"Connection from {address} has been established.")
     clientsocket.send(msg.encode())   
 
 def readyRecive():
@@ -26,15 +22,6 @@ def Recive(s):
     while True:
         msg = s.recv(1024).decode()
         return msg
-        # if new_msg:
-        #     #print("new msg len:",msg[:HEADERSIZE])
-        #     msglen = int(msg[:HEADERSIZE])
-        #     new_msg = False
-        # #print(f"full message length: {msglen}")
-        # full_msg += msg.decode()
-        # if len(full_msg)-HEADERSIZE == msglen:
-        #     #print(full_msg[HEADERSIZE:])
-        #     return full_msg[HEADERSIZE:]
 
 
 #send public key to user B
@@ -53,15 +40,14 @@ n_B=int(Recive(s))
 
 
 while True:
-    print("Reciveeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
     Cipher=Recive(s) #recive the Cipher text
     Message=Decrypt(Cipher,n,d)
     if(Message=='0'):
-        print("The Message Sended is too long, please incerase P & Q and resend the public key to can recive it")
+        print("The Message Sended is too long, please incerase P & Q and resend the public key to can recive it") #message lenth can be up to 66
     else:
-        print(f"Recived Message from B :{Message} ")
+        print(f"Donia :{Message} ")
 
-    Message = input ("Message to User B :")
+    Message = input ("Raghad :")
     Cipher=Encrypt(str(Message),n_B,e_B) # encript with the publick key of reciver
     if(Cipher != false):
         Send(Cipher,clientsocket, address ) #send the cipher message to reciver

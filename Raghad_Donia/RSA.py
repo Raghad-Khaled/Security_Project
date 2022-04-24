@@ -112,5 +112,3 @@ def Decrypt(C, n, d):
 # ciphertext = Encrypt("HiDonia", modulo, exponent)
 # message = Decrypt(ciphertext,modulo , InvertModulo(exponent,(1000000006)*(1000000008)))
 # print(message)    
-
-#print(ord('/'))

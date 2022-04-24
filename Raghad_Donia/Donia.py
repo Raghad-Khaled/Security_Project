@@ -2,8 +2,6 @@ from email.message import Message
 from RSA import *
 import socket
 
-HEADERSIZE = 10
-
 def readySend():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((socket.gethostname(), 1242))
@@ -11,9 +9,7 @@ def readySend():
     return s.accept()
 
 def Send(msg,clientsocket, address):
-    print(f"Connection from {address} has been established.")
-    #msg = f"{len(msg):<{HEADERSIZE}}"+msg
-    #print(msg)
+    #print(f"Connection from {address} has been established.")
     clientsocket.send(msg.encode()) 
 
 def readyRecive():
@@ -27,15 +23,6 @@ def Recive(s):
     while True:
         msg = s.recv(1024).decode()
         return msg
-        # if new_msg:
-        #     #print("new msg len:",msg[:HEADERSIZE])
-        #     msglen = int(msg[:HEADERSIZE])
-        #     new_msg = False
-        # #print(f"full message length: {msglen}")
-        # full_msg += msg.decode()
-        # if len(full_msg)-HEADERSIZE == msglen:
-        #     #print(full_msg[HEADERSIZE:])
-        #     return full_msg[HEADERSIZE:]
 
 #recive public key from user A
 s=readyRecive()
@@ -52,7 +39,7 @@ Send(str(n),clientsocket, address )
 
 
 while True:
-    Message = input ("Message to User A :")
+    Message = input ("Donia :")
     Cipher=Encrypt(str(Message),n_A,e_A) # encript with the publick key of reciver
     if(Cipher != false):
         Send(Cipher,clientsocket, address ) #send the cipher message to reciver
@@ -60,13 +47,12 @@ while True:
         Cipher=Encrypt(str(0),n_A,e_A)
         Send(Cipher,clientsocket, address ) #send the cipher message to reciver
 
-    print("Reciveeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
     Cipher=Recive(s) #recive the Cipher text
     Message=Decrypt(Cipher,n,d)
     if(Message=='0'):
         print("The Message Sended is too long, please incerase P & Q and resend the public key to can recive it")
     else:
-        print(f"Recived Message from A :{Message} ")    
+        print(f"Raghad :{Message} ")    
 
 
 
