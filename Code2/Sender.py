@@ -12,9 +12,9 @@ def readySend():
 
 def Send(msg,clientsocket, address):
     print(f"Connection from {address} has been established.")
-    msg = f"{len(msg):<{HEADERSIZE}}"+msg
-    print(msg)
-    clientsocket.send(bytes(msg,"utf-8")) 
+    #msg = f"{len(msg):<{HEADERSIZE}}"+msg
+    #print(msg)
+    clientsocket.send(msg.encode()) 
 
 def readyRecive():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -25,16 +25,17 @@ def Recive(s):
     full_msg=''
     new_msg = True
     while True:
-        msg = s.recv(16)
-        if new_msg:
-            #print("new msg len:",msg[:HEADERSIZE])
-            msglen = int(msg[:HEADERSIZE])
-            new_msg = False
-        #print(f"full message length: {msglen}")
-        full_msg += msg.decode("utf-8")
-        if len(full_msg)-HEADERSIZE == msglen:
-            print(full_msg[HEADERSIZE:])
-            return full_msg[HEADERSIZE:]
+        msg = s.recv(1024).decode()
+        return msg
+        # if new_msg:
+        #     #print("new msg len:",msg[:HEADERSIZE])
+        #     msglen = int(msg[:HEADERSIZE])
+        #     new_msg = False
+        # #print(f"full message length: {msglen}")
+        # full_msg += msg.decode()
+        # if len(full_msg)-HEADERSIZE == msglen:
+        #     #print(full_msg[HEADERSIZE:])
+        #     return full_msg[HEADERSIZE:]
 
 #recive public key from user A
 s=readyRecive()
@@ -59,6 +60,7 @@ while True:
         Cipher=Encrypt(str(0),n_A,e_A)
         Send(Cipher,clientsocket, address ) #send the cipher message to reciver
 
+    print("Reciveeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
     Cipher=Recive(s) #recive the Cipher text
     Message=Decrypt(Cipher,n,d)
     if(Message=='0'):
