@@ -1,6 +1,12 @@
-from email.message import Message
+#from email.message import Message
 from RSA import *
 import socket
+import sys
+
+CHAT =1
+FILE =2
+# Tha Modes of operation 1)chat 2)file read and write 3)attack  
+Mode =int(sys.argv[1])
 
 def readySend():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -36,23 +42,48 @@ d,n=GeneratePrivateKey(P,Q,e)
 clientsocket, address =readySend()
 Send(str(e),clientsocket, address )
 Send(str(n),clientsocket, address )
+# write the public key at file to be Public (can be reed by attacker)
+f=open("publicData.txt",'w')
+f.write(str(e_A)+"\n") # save the public key of Raghad
+f.write(str(n_A)+"\n")
 
+Doniaout=open("Doniaout.txt",'w')
+Doniain=open("Doniain.txt",'r')
 
 while True:
-    Message = input ("Donia :")
+    if(Mode==CHAT):
+        Message = input ("Donia :")
+    elif(Mode ==FILE):
+        Message=Doniain.readline()
+
+    if(Message=="" or Message=="q"):
+        Message="q"                  # when get q that mean end the chat or the end of file 
     Cipher=Encrypt(str(Message),n_A,e_A) # encript with the publick key of reciver
+
     if(Cipher != false):
         Send(Cipher,clientsocket, address ) #send the cipher message to reciver
-    else:
+        f.write(str(ConvertToInt(Cipher)) + '\n')    
+    else:                                             # can not encript as the message too large so send 0
         Cipher=Encrypt(str(0),n_A,e_A)
         Send(Cipher,clientsocket, address ) #send the cipher message to reciver
 
+    if(Message=="q"):  #end the program as  q is typed
+        break
+
+
     Cipher=Recive(s) #recive the Cipher text
     Message=Decrypt(Cipher,n,d)
-    if(Message=='0'):
+    if(Message=="q"):  #end the program as  q is typed
+        break
+    elif(Message=='0'):
         print("The Message Sended is too long, please incerase P & Q and resend the public key to can recive it")
-    else:
-        print(f"Raghad :{Message} ")    
+    elif(Mode==CHAT):
+        print(f"Raghad :{Message} ")
+    elif(Mode==FILE):
+        Doniaout.write("Raghad :"+Message+"\n")         
+
+
+
 
 
 

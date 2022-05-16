@@ -65,11 +65,7 @@ def ReadfromFile(filename):
             print("Can't generat keys as P and Q must be integers")
 
 
-def ReadMessage():
-    with open('Message.txt') as f:
-        Message=f.read()
-        return Message
-        
+       
 
 
 def GeneratePublicKey(P,Q):
@@ -80,6 +76,13 @@ def GeneratePublicKey(P,Q):
     while GCD(e, phain) !=1:
         e=random.randint(3, n-1)    
     return(e,n)
+
+
+def Generater(n):
+    r=random.randint(3, n-1)
+    while GCD(r, n) !=1:
+        r=random.randint(3, n-1)    
+    return r   
 
 
 def GeneratePrivateKey(P,Q,e):
