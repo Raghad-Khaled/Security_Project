@@ -71,7 +71,6 @@ def ReadfromFile(filename):
 def GeneratePublicKey(P,Q):
     n=P*Q
     phain=(P-1)*(Q-1)
-    #e=phain-1 # any two consective numbers are coprime gcd(e,phain)=1 e<n
     e=random.randint(3, n-1)
     while GCD(e, phain) !=1:
         e=random.randint(3, n-1)    
@@ -94,10 +93,8 @@ def GeneratePrivateKey(P,Q,e):
 def Encrypt(M, n, e):
     Messageint=ConvertToInt(M)
     if(Messageint > n):
-        #print("the message is too large, increase P & Q")
         return false
     Cipherint=PowMod(Messageint,e,n)
-    #print(Cipherint)
     Cipher =ConvertToStr(Cipherint)
     return Cipher
 
@@ -106,12 +103,4 @@ def Decrypt(C, n, d):
     Message=PowMod(Chipherint,d,n)
     Message =ConvertToStr(Message)
     return Message   
-
-#P,Q=ReadfromFile()
-#print(GeneratePublicKey(P,Q))   
-
-# exponent = 23917
-# modulo = 1000000007 * 1000000009
-# ciphertext = Encrypt("HiDonia", modulo, exponent)
-# message = Decrypt(ciphertext,modulo , InvertModulo(exponent,(1000000006)*(1000000008)))
-# print(message)    
+ 
