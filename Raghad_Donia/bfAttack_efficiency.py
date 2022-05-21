@@ -1,5 +1,5 @@
 from RSA import *
-filePath='E:\cryptography\project\Security_Project4\Security_Project\Code\\'
+filePath='\EncEfficiency\\'
 def CalcTime(Message, n_len_start, n_len_end, step):
     Y= []
 
@@ -87,11 +87,10 @@ def mathematicalBFAttack(n, e, c):
             "attacked_message_int":decipheredtextInt}
                 
 def attack_BF():
-    filePath='\hacked\\'
+    filePath='BF_Attack_Samples\hacked\\'
     with open(filePath+'n.txt', 
     'r') as n_file,open(filePath+"e.txt", 
-    'r') as e_file,  open(filePath+'ciphers.txt', 
-    'r')as ciphers, open(filePath+'ciphersInt.txt', 'r') as ciphersInt, open(filePath+'times.txt', 
+    'r') as e_file,open(filePath+'ciphersInt.txt', 'r') as ciphersInt, open(filePath+'times.txt', 
     'w') as execTimes,open(filePath+'p_hacked.txt', 
     'w') as p_hacked,open(filePath+'q_hacked.txt', 
     'w') as q_hacked,open(filePath+'AttackedMsgs.txt', 
@@ -104,19 +103,22 @@ def attack_BF():
             n=int(n_line.rstrip())
             e= int(e_file.readline().rstrip())
             c = int(ciphersInt.readline().rstrip())
+            print(c)
             print(start_bit_size)
             start_bit_size+=2
             start = time.time() 
             if n % 2 == 0:
                 p = 2
                 q = n // 2
-                d, n_temp= GeneratePrivateKey(p, q, e)
-                decipheredtext, decipheredtextInt= Decrypt(c, n, d, True)
                 end=time.time()
                 print(end-start)
+                d, n_temp= GeneratePrivateKey(p, q, e)
+                decipheredtext, decipheredtextInt= Decrypt(c, n, d, True)
                 execTimes.writelines(str(end-start)+'\n')
                 p_hacked.writelines(str(p)+'\n')
                 q_hacked.writelines(str(q)+'\n')
+                print(decipheredtext)
+                print(decipheredtextInt)
                 AttackedMsgs.writelines(str(decipheredtext)+'\n')
                 #return decipheredtext, decipheredtextInt
             else:
@@ -135,27 +137,36 @@ def attack_BF():
                         execTimes.writelines(str(end-start)+'\n')
                         p_hacked.writelines(str(p)+'\n')
                         q_hacked.writelines(str(q)+'\n')
+                        print(decipheredtext)
                         AttackedMsgs.writelines(str(decipheredtext)+'\n')
                         break
                     #return decipheredtext, decipheredtextInt
     #return decipheredtext, decipheredtextInt
 def plotBruteForceAttackEfficiency():
-    filePath='\hacked\\'
+    filePath='BF_Attack_Samples\hacked\\'
     n_values=[]
     timeValues=[]
     with open(filePath+'n.txt', 'r') as n_file, open(filePath+'times.txt', 
     'r') as execTimes: 
-
+        n_bits=8
+        n_sizes=[]
         for n_line in n_file:
+            
             time=execTimes.readline().rstrip()
             if(time==''):
                 break
+            n_sizes.append(n_bits)
             n=int(n_line.rstrip())
             n_values.append(n)
-            timeValues.append(float(time)/60)
+            timeValues.append(float(time))
+            n_bits+=2
         fig, ax = plt.subplots()
-        ax.semilogy(n_values, timeValues, linewidth=2.0)
+        ax.set_xticklabels(n_values)
+        ax.plot(n_sizes, timeValues, linewidth=2.0)
+        plt.xlabel("Key Values (decimal)")
+        plt.ylabel("Execution Time (decimal)")
         plt.show()
+        
 #n_All, e_ALL, P_all, Q_all= generateRandomN(8, 76, 2)
 #attack_BF()
 
@@ -168,7 +179,7 @@ def plotBruteForceAttackEfficiency():
 # ax.plot(X, Y, linewidth=2.0)
 # plt.show()
 
-#plotBruteForceAttackEfficiency()
+plotBruteForceAttackEfficiency()
 
 
 
