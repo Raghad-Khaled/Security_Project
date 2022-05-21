@@ -59,7 +59,7 @@ while True:
     Cipher=Recive(s) #recive the Cipher text
     if(Cipher == "end"):       # CCA end
         break
-    Message=Decrypt(Cipher,n,d)
+    Message, MessageInt=Decrypt(Cipher,n,d)
     if(Message=="q"):  #end the program as  q is typed
         break
     elif(Message=='0'):
@@ -79,11 +79,11 @@ while True:
         if(Message=="" or Message=="q"):
             Message="q"                  # when get q that mean end the chat or the end of file
 
-        Cipher=Encrypt(str(Message),n_B,e_B) # encript with the publick key of reciver
+        Cipher, CipherInt=Encrypt(str(Message),n_B,e_B) # encript with the publick key of reciver
         if(Cipher != false):
             Send(Cipher,clientsocket, address ) #send the cipher message to reciver
         else:
-            Cipher=Encrypt(str(0),n_B,e_B)
+            Cipher, CipherInt=Encrypt(str(0),n_B,e_B)
             Send(Cipher,clientsocket, address ) #send the cipher message to reciver
 
         if(Message=="q"):  #end the program as  q is typed

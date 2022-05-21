@@ -58,13 +58,13 @@ while True:
 
     if(Message=="" or Message=="q"):
         Message="q"                  # when get q that mean end the chat or the end of file 
-    Cipher=Encrypt(str(Message),n_A,e_A) # encript with the publick key of reciver
+    Cipher, CipherInt=Encrypt(str(Message),n_A,e_A) # encript with the publick key of reciver
 
     if(Cipher != false):
         Send(Cipher,clientsocket, address ) #send the cipher message to reciver
         f.write(str(ConvertToInt(Cipher)) + '\n')    
     else:                                             # can not encript as the message too large so send 0
-        Cipher=Encrypt(str(0),n_A,e_A)
+        Cipher, CipherInt=Encrypt(str(0),n_A,e_A)
         Send(Cipher,clientsocket, address ) #send the cipher message to reciver
 
     if(Message=="q"):  #end the program as  q is typed
@@ -72,7 +72,7 @@ while True:
 
 
     Cipher=Recive(s) #recive the Cipher text
-    Message=Decrypt(Cipher,n,d)
+    Message, MessageInt=Decrypt(Cipher,n,d)
     if(Message=="q"):  #end the program as  q is typed
         break
     elif(Message=='0'):

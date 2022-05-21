@@ -1,7 +1,29 @@
+from ast import Str
 import random
-
 from sqlalchemy import false
-
+import time
+import matplotlib.pyplot as plt
+from random import randint
+import sys
+sys.setrecursionlimit(5000)
+tests_count= 10000
+def generate_big_prime(n):
+    found_prime = False
+    while not found_prime:
+        p = randint(2**(n-1), 2**n-1)
+        if is_prime_optimized(p, tests_count):
+            return p
+def is_prime_optimized(n, testsNumber):
+    ## applying fermat's primality test
+    if n == 1:
+        return False
+    if testsNumber >= n:
+        testsNumber = n - 1
+    for x in range(testsNumber):
+        rand = randint(1, n - 1)
+        if pow(rand, n-1, n) != 1:
+            return False
+    return True
 
 def ConvertToInt(message_str):
   res = 0
@@ -16,7 +38,6 @@ def ConvertToStr(n):
         n //= 256
     return res[::-1]
 
-#print(ConvertToInt('Number Theory'))
 
 def ExtendedEuclid(a, b):
     if b == 0:
@@ -69,6 +90,8 @@ def ReadfromFile(filename):
 
 
 def GeneratePublicKey(P,Q):
+    P= int(P)
+    Q= int(Q)
     n=P*Q
     phain=(P-1)*(Q-1)
     e=random.randint(3, n-1)
@@ -85,6 +108,8 @@ def Generater(n):
 
 
 def GeneratePrivateKey(P,Q,e):
+    P= int(P)
+    Q= int(Q)
     n=P*Q
     phain=(P-1)*(Q-1)
     d=InvertModulo(e,phain)
@@ -96,11 +121,13 @@ def Encrypt(M, n, e):
         return false
     Cipherint=PowMod(Messageint,e,n)
     Cipher =ConvertToStr(Cipherint)
-    return Cipher
+    return Cipher, Cipherint
 
-def Decrypt(C, n, d):
-    Chipherint=ConvertToInt(C)
-    Message=PowMod(Chipherint,d,n)
-    Message =ConvertToStr(Message)
-    return Message   
+def Decrypt(C, n, d, isInt=False):
+    Chipherint=C
+    if(isInt==False):
+        Chipherint=ConvertToInt(C)
+    MessageInt=PowMod(Chipherint,d,n)
+    Message =ConvertToStr(MessageInt)
+    return Message,MessageInt
  
